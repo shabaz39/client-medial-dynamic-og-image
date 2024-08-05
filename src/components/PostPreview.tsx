@@ -1,4 +1,5 @@
 import React from 'react';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 interface PostData {
   title: string;
@@ -11,6 +12,7 @@ interface PostPreviewProps {
   ogImageUrl: string;
   submedial: string;
   submedialLogo: string;
+  loadingOgImage: boolean; // Add loading state prop
 }
 
 const PostPreview: React.FC<PostPreviewProps> = ({
@@ -18,9 +20,10 @@ const PostPreview: React.FC<PostPreviewProps> = ({
   ogImageUrl,
   submedial,
   submedialLogo,
+  loadingOgImage
 }) => {
   return (
-    <div >
+    <div>
       {/* Main Content */}
       <div className="max-w-3xl mx-auto bg-white border border-gray-300 rounded-lg shadow-lg p-4 mb-6">
         <div className="flex items-center justify-between">
@@ -60,7 +63,11 @@ const PostPreview: React.FC<PostPreviewProps> = ({
       </div>
 
       {/* OG Image Preview */}
-      {ogImageUrl && (
+      {!ogImageUrl && loadingOgImage ? (
+        <div className="flex items-center justify-center mt-8">
+          <BeatLoader color="#3498db" />
+        </div>
+      ) : ogImageUrl ? (
         <div>
           <h3 className="text-lg font-semibold text-gray-700">Generated OG Image:</h3>
           <a href={ogImageUrl} target="_blank" rel="noopener noreferrer" className="block mt-2">
@@ -71,7 +78,7 @@ const PostPreview: React.FC<PostPreviewProps> = ({
             />
           </a>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
