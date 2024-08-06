@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PostForm from './components/PostForm';
 import PostPreview from './components/PostPreview';
 import { Helmet } from 'react-helmet';
@@ -43,19 +43,34 @@ const App: React.FC = () => {
 
       const data = await response.json();
       setOgImageUrl(data.ogImageUrl);
+      console.log('OGIMAGEURL', ogImageUrl)
+      console.log('data', data.ogImageUrl)
+
     } catch (error) {
       console.error('Error generating OG image:', error);
     }
 
-    console.log(ogImageUrl)
+
+
   };
+
+   // Effect to update the Helmet tags when post or ogImageUrl changes
+   useEffect(() => {
+    if (post && ogImageUrl) {
+      document.title = post.title || 'Dynamic Post Page with OG Image Generation';
+      console.log('Updated OGIMAGEURL:', ogImageUrl);
+    }
+  }, [post, ogImageUrl]);
+
+  console.log('OGIMAGEURL 2', ogImageUrl)
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
        <Helmet>
         <meta property="og:title" content={post?.title || 'Dynamic Post Page with OG Image Generation'} />
         <meta property="og:description" content={post?.content.slice(0, 150) || ''} />
-        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image" content={ogImageUrl || ''} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:type" content="website" />
